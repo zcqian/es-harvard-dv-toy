@@ -7,3 +7,6 @@ Werkzeug==0.16.1
 
 # Elasticsearch 7.x
 elasticsearch>=7.0.0,<8.0.0
+
+# Requests
+requests>=2.22,<3
