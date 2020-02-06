@@ -41,7 +41,6 @@ def handle_data():
                 source = es.get_source(index='dv', id=idx)
                 code = 200
             except elasticsearch.exceptions.NotFoundError:
-                # TODO: implement getting using short id
                 source = {}
                 code = 400
             return jsonify(source), code

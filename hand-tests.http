@@ -14,7 +14,5 @@ Content-Type: application/json
 ### Get a document using full link
 GET http://localhost:5000/data?id=https%3A%2F%2Fdoi.org%2F10.11588%2Fdata%2F10006
 
-### short link
-GET http://localhost:5000/data?id=10006
 
 ###
