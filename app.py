@@ -79,8 +79,50 @@ def handle_data():
 
 @app.route('/search', methods=['GET'])
 def search_data():
-    # TODO: implement searching
-    abort(500)
+    # given that we have so many fields but I do not want to add all of them at once,
+    # it makes more sense that the query is JSON in the HTTP body
+    r = request.get_json()
+    # validate input
+    if not (r and isinstance(r, dict)):
+        abort(400)
+
+    mapping = {
+        'q': '*',  # general search term for all fields
+        'name': 'name',  # search in `name' field
+        'creator': 'creator.*',  # search in `creator.*'
+        'author': 'author.*',  # search in `author.*'
+        'description': 'description',
+        'citation': 'citation.*',
+        'publisher': 'publisher.name',
+        'provider': 'provider.name',
+        'keywords': 'keywords'
+    }
+    # handles the general fields using multi_match
+    # base query body, using AND to connect multiple searches
+    es_query_body = {"query": {"bool": {"must": []}}}
+    for k in mapping:
+        queries = r.get(k, None)
+        if queries is None or len(queries) == 0:
+            continue  # ignore empty query
+        # handle single query, by making it the same as multiple/List
+        if not isinstance(queries, list):
+            queries = [queries]
+        # handle multiple query using OR
+        this_query_body = {"bool": {"should": []}}
+        for query in queries:
+            this_query_body['bool']['should'].append(
+                {"multi_match": {"query": str(query), "fields": mapping[k], "operator": "and"}}
+            )
+        es_query_body['query']['bool']['must'].append(this_query_body)
+    # handle funder.name facet/filter, if it exists
+    facet = request.args.get('facet', None, type=str)
+    if facet:
+        es_query_body['query']['bool']['filter'] = {"term": {"funder.name.keyword_ci": facet}}
+    r = es.search(index='dv', body=es_query_body)
+    output = []
+    for hit in r['hits']['hits']:
+        output.append(hit['_source'])
+    return jsonify(output)
 
 
 def insert_data(data: List[dict]):
