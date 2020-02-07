@@ -85,7 +85,7 @@ def search_data():
     # validate input
     if not (r and isinstance(r, dict)):
         abort(400)
-
+    # TODO: add more fields
     mapping = {
         'q': '*',  # general search term for all fields
         'name': 'name',  # search in `name' field
