@@ -17,7 +17,30 @@ def hello_world():
     return 'Hello World!'
 
 
-# TODO: set up proper mapping for data
+@app.route('/setup', methods=['POST', 'DELETE'])
+def index_setup():
+    # default reply, we will let the app crash if this fails
+    success = {'success': True}
+
+    # setup the index and custom mapping
+    if request.method == 'POST':
+        if es.indices.exists(index='dv'):
+            abort(400)
+        es.indices.create(index='dv', body={
+            'settings': {'analysis': {'normalizer': {'ci_folding_norm': {'type': 'custom', 'char_filter': [], 'filter': ['lowercase', 'asciifolding']}}}},
+            'mappings': {'properties': {'funder.name': {'type': 'text', 'fields': {'keyword_ci': {'type': 'keyword', 'normalizer': 'ci_folding_norm'}}}}}
+        })
+    # drop the index
+    elif request.method == 'DELETE':
+        if es.indices.exists(index='dv'):
+            es.indices.delete(index='dv')
+    # default, do nothing
+    else:
+        pass
+    # return success
+    return jsonify(success), 200
+
+
 # TODO: refactor this part
 @app.route('/data', methods=['POST', 'GET', 'DELETE'])
 def handle_data():
