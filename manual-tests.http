@@ -1,0 +1,74 @@
+### Delete all data via API
+DELETE http://localhost:5000/data
+
+### Delete index via API
+DELETE http://localhost:5000/setup
+
+### Create index via API
+POST http://localhost:5000/setup
+
+### Import data
+POST http://localhost:5000/data
+Content-Type: application/json
+
+< harvard_dataverse.json
+
+
+### Search via API
+GET http://localhost:5000/search
+Content-Type: application/json
+
+{
+  "q": "Projektdatenbank"
+}
+
+### Search via API, OR
+GET http://localhost:5000/search
+Content-Type: application/json
+
+{
+  "q": "",
+  "name": ["Literatur", "Distance"],
+  "creator": "",
+  "author": "",
+  "description": "",
+  "citation": "",
+  "publisher": "",
+  "provider": "",
+  "keywords": ""
+}
+
+### Search via API, OR
+GET http://localhost:5000/search
+Content-Type: application/json
+
+{
+  "q": "",
+  "name": "Distance",
+  "creator": "",
+  "author": "",
+  "description": "",
+  "citation": "",
+  "publisher": "heiDATA",
+  "provider": "",
+  "keywords": "replication"
+}
+
+### Search via API, filter, case insensitive
+GET http://localhost:5000/search?facet=uNiTEd%20sTAteS%20AgeNCY%20FoR%20iNtErNAtIONAL%20DEVELOPMENT%20%28USAID%29
+Content-Type: application/json
+
+{
+  "q": "",
+  "name": "",
+  "creator": "",
+  "author": "",
+  "description": "",
+  "citation": "",
+  "publisher": "",
+  "provider": "",
+  "keywords": ""
+}
+
+
+###
