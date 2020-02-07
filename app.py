@@ -9,7 +9,7 @@ from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 
-es = Elasticsearch(hosts=["192.168.21.136"])
+es = Elasticsearch()
 
 
 @app.route('/')
