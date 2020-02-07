@@ -55,7 +55,7 @@ Content-Type: application/json
 }
 
 ### Search via API, filter, case insensitive
-GET http://localhost:5000/search?facet=uNiTEd%20sTAteS%20AgeNCY%20FoR%20iNtErNAtIONAL%20DEVELOPMENT%20%28USAID%29
+GET http://localhost:5000/search?facet=uNiTEd+sTAteS+AgeNCY%20FoR%20iNtErNAtIONAL%20DEVELOPMENT%20%28USAID%29
 Content-Type: application/json
 
 {
