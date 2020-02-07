@@ -26,6 +26,7 @@ def index_setup():
     if request.method == 'POST':
         if es.indices.exists(index='dv'):
             abort(400)
+        # the settings are for creating a case insensitive mapping for funder.name
         es.indices.create(index='dv', body={
             'settings': {'analysis': {'normalizer': {'ci_folding_norm': {'type': 'custom', 'char_filter': [], 'filter': ['lowercase', 'asciifolding']}}}},
             'mappings': {'properties': {'funder.name': {'type': 'text', 'fields': {'keyword_ci': {'type': 'keyword', 'normalizer': 'ci_folding_norm'}}}}}
